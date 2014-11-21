@@ -25,4 +25,4 @@ RUN ["/bin/bash", "-l", "-c", "bundle install"]
 
 EXPOSE 8181
 
-CMD ["usr/local/bin/lita start -c /root/jarvis/lita_config.rb -l /root/jarvis/lita.log -p /root/jarvis/lita.pid -k"]
+CMD ["/usr/local/bin/lita start -c /root/jarvis/lita_config.rb -l /root/jarvis/lita.log -p /root/jarvis/lita.pid -k"]
