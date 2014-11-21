@@ -5,19 +5,24 @@
 ###########################
 
 # Set the base image to use Ubuntu
-FROM ubuntu
+FROM litaio/ruby
 
 # Set the file maintainer
-MAINTAINER http://github.com/marcusmyers
+MAINTAINER http://github.com/marcusmyers/dockerfile-jarvisbot
 
 # Install packages for lita
-RUN apt-get update
-RUN apt-get install -y --force-yes build-essential curl git
-RUN apt-get install -y --force-yes ruby
-RUN apt-get clean
+RUN apt-get update &&  apt-get install -y --force-yes build-essential curl git &&  apt-get clean
 
 # Install lita gem
-RUN echo 'gem install lita'
+RUN ["/bin/bash", "-l", "-c", "gem install lita --no-ri --no-rdoc"]
 
-# Create Jarvis directory
-RUN echo 'mkdir -p /root/jarvis'
+# Clone jarvisbot into root
+RUN git clone https://github.com/marcusmyers/jarvis.git /root/jarvis
+
+WORKDIR /root/jarvis
+
+RUN ["/bin/bash", "-l", "-c", "bundle install"]
+
+EXPOSE 8181
+
+CMD ["/usr/bin/lita start -c /root/jarvis/lita_config.rb -l /root/jarvis/lita.log -p /root/jarvis/lita.pid -k"]
